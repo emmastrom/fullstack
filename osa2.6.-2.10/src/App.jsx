@@ -31,11 +31,19 @@ const App = () => {
 
     const double = persons.filter((person) => person.name === newName).length
     const result = double === 0 ? setPersons(persons.concat(nameObject)) : alert(`${newName} is already added to phonebook`)
-    setNewName('')
-    setNewNumber('')
+
+    if (double === 0) {
+      axios
+      .post('http://localhost:3001/persons', nameObject)
+      .then(response => {
+        console.log(response)
+        setNewName('')
+        setNewNumber('')
+      })
+
     console.log(double)
   }
-
+    }
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
