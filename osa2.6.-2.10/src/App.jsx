@@ -56,12 +56,15 @@ const App = () => {
     setSearchName(event.target.value)
   }
 
-  const handleDelete = (id) => {
-    personService
+  const handleDelete = (id, name) => {
+
+    if (window.confirm(`Delete ${name}?`)) {
+      personService
       .deletePerson(id)
       .then(() => {
         setPersons(persons.filter(n => n.id !== id))
       })
+    }
   }
 
   const personsToShow = showAll
