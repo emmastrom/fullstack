@@ -26,18 +26,27 @@ const App = () => {
       number: newNumber
     }
 
-    const double = persons.filter((person) => person.name === newName).length
-    const result = double === 0 ? setPersons(persons.concat(nameObject)) : alert(`${newName} is already added to phonebook`)
-
-    if (double === 0) {
-      personService
-        .create(nameObject)
-        .then(returnedPersons => {
-          setPersons(persons.concat(returnedPersons))
+    if (persons.some(person => person.name === newName)) {
+      if (window.confirm(`${nameObject.name} is already added to phonebook, replace old number with a new one?`)) {
+        const updated = persons.find((person) => person.name === newName)
+        updated.number = newNumber
+        personService
+        .update(updated)
+        .then(updatedPerson => {
+          setPersons(persons.map(person => person.id !== updatedPerson.id ? person : updatedPerson))
           setNewName('')
           setNewNumber('')
-      })
-    console.log(double)
+        })
+      }
+    } else {
+      personService
+      .create(nameObject)
+      .then(returnedPersons => {
+        setPersons(persons.concat(returnedPersons))
+        setNewName('')
+        setNewNumber('')
+  })
+
   }
     }
 
