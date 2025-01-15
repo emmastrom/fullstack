@@ -1,6 +1,8 @@
-const Name = ({ name }) => {
+import React from 'react'
+
+const Name = ({ name, handleDelete }) => {
     return (
-      <ul>{name.name} {name.number}</ul>
+      <li>{name.name} {name.number} <button onClick={handleDelete}>delete</button></li>
     )
   }
   

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -57,6 +56,14 @@ const App = () => {
     setSearchName(event.target.value)
   }
 
+  const handleDelete = (id) => {
+    personService
+      .deletePerson(id)
+      .then(() => {
+        setPersons(persons.filter(n => n.id !== id))
+      })
+  }
+
   const personsToShow = showAll
   ? persons
   : persons.filter(person => person.name.toUpperCase().includes(searchName.toUpperCase()))
@@ -73,7 +80,7 @@ const App = () => {
       
       <h2>Numbers</h2>
       
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
     </div>
   )
 
