@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Notification from './components/Notification'
+import Error from './components/Error'
 import personService from './services/persons'
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -39,9 +41,9 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setNotificationMessage(`Updated ${nameObject.name}'s number`)
-          setTimeout(() => {
-            setNotificationMessage(null)
-          }, 5000)
+        })
+        .catch(error => {
+          setErrorMessage(`Update of ${nameObject.name}'s number failed`)
         })
       }
     } else {
@@ -52,12 +54,12 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setNotificationMessage(`Added ${nameObject.name}`)
-        setTimeout(() => {
-          setNotificationMessage(null)
-        }, 5000)
   })
-
   }
+  setTimeout(() => {
+    setNotificationMessage(null)
+    setErrorMessage(null)
+  }, 5000)
     }
 
   const handleNameChange = (event) => {
@@ -83,11 +85,15 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(n => n.id !== id))
         setNotificationMessage(`Deleted ${name}`)
-        setTimeout(() => {
-          setNotificationMessage(null)
-        }, 5000)
       })
+      .catch(error => {
+        setErrorMessage(`Information of ${name}' has already been removed from server`)
+  })
     }
+    setTimeout(() => {
+      setNotificationMessage(null)
+      setErrorMessage(null)
+    }, 5000)
   }
 
   const personsToShow = showAll
@@ -97,6 +103,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Error message={errorMessage} />
 
       <Notification message={notificationMessage} />
 
