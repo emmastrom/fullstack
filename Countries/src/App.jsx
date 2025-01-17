@@ -7,6 +7,7 @@ function App() {
   const [searchName, setSearchName] = useState('')
   const [countries, setCountries] = useState([])
   const [searchResults, setSearchResults] = useState([])
+  const [forecast, setForecast] = useState({})
 
   useEffect(() => {
     countriesService
@@ -19,7 +20,9 @@ function App() {
               capital: country.capital,
               area: country.area,
               languages: country.languages,
-              flag: country.flags.png
+              flag: country.flags.png,
+              capital: country.capital,
+              capitalInfo: country.capitalInfo.latlng
 
             }
           )
@@ -35,16 +38,27 @@ function App() {
   }
 
   const handleSearch = (event) => {
-    //console.log(event.target.value)
     setSearchName(event.target.value)
     setSearchResults(countries.filter(country => country.name.toUpperCase().includes(event.target.value.toUpperCase())))
-    //console.log(searchResults)
   }
 
+  const currentWeather = (country) => {
+      console.log(country.capitalInfo[1])
+      countriesService
+        .getWeather(country.capitalInfo[0], country.capitalInfo[1])
+        .then(weatherInfo => {
+          const currentForecast = {
+            name: country.name,
+            temp: weatherInfo.current.temperature_2m,
+            wind: weatherInfo.current.wind_speed_10m
+          }
+          setForecast(currentForecast)
+      })
+  }
   return (
     <div>
       <Filter search={searchName} handle={handleSearch} />
-      <Countries results={searchResults} handleShow={handleShow} />
+      <Countries results={searchResults} handleShow={handleShow} weather={currentWeather} forecast={forecast} />
     </div>
   )
 }

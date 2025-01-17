@@ -1,9 +1,10 @@
 import Country from './Country'
 
-const Countries = ({ results, handleShow }) => {
+const Countries = ({ results, handleShow, weather, forecast }) => {
     if (results.length === 1) {
+        weather(results[0])
         return (
-            <Country result={results} />
+            <Country result={results} forecast={forecast}/>
         )
     }
     return (
