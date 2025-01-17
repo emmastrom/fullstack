@@ -1,6 +1,6 @@
 import Country from './Country'
 
-const Countries = ({ results }) => {
+const Countries = ({ results, handleShow }) => {
     if (results.length === 1) {
         return (
             <Country result={results} />
@@ -11,7 +11,7 @@ const Countries = ({ results }) => {
             ? <div>Too many matches, specify another filter</div>
             : results.map(country =>
                 <li key={country.name}>
-                    {country.name}
+                    {country.name} <button onClick={() => handleShow(country.name)}>show</button>
                 </li>
             )
             

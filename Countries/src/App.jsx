@@ -29,6 +29,11 @@ function App() {
       })
   }, [])
 
+  const handleShow = (showCountry) => {
+    setSearchName(showCountry)
+    setSearchResults(countries.filter(country => country.name.toUpperCase().includes(showCountry.toUpperCase())))
+  }
+
   const handleSearch = (event) => {
     //console.log(event.target.value)
     setSearchName(event.target.value)
@@ -39,7 +44,7 @@ function App() {
   return (
     <div>
       <Filter search={searchName} handle={handleSearch} />
-      <Countries results={searchResults} />
+      <Countries results={searchResults} handleShow={handleShow} />
     </div>
   )
 }
