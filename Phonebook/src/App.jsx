@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
-  const [showAll, setShowAll] = useState(false)
+  const [showAll] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -42,7 +42,7 @@ const App = () => {
           setNewNumber('')
           setNotificationMessage(`Updated ${nameObject.name}'s number`)
         })
-        .catch(error => {
+        .catch(() => {
           setErrorMessage(`Update of ${nameObject.name}'s number failed`)
         })
       }
@@ -90,7 +90,7 @@ const App = () => {
         setPersons(persons.filter(n => n.id !== id))
         setNotificationMessage(`Deleted ${name}`)
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(`Information of ${name}' has already been removed from server`)
   })
     }
