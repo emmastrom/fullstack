@@ -135,7 +135,6 @@ describe('most blogs', () => {
 
 describe('most likes', () => {
   test('of empty list is undefined', () => {
-
     const result = listHelper.mostLikes(listWithNoBlogs)
     assert.strictEqual(result, undefined)
   })
