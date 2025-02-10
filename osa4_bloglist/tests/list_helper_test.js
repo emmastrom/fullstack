@@ -110,5 +110,25 @@ describe('favorite blog', () => {
     assert.strictEqual(result.author, 'Edsger W. Dijkstra')
     assert.strictEqual(result.likes, 12)
   })
+})
+
+describe('most blogs', () => {
+  
+  test('of empty list is undefined', () => {
+    const result = listHelper.mostBlogs(listWithNoBlogs)
+    assert.strictEqual(result, undefined)
+  })
+
+  test('when list has only one blog equals that blog', () => {
+      const result = listHelper.mostBlogs(listWithOneBlog)
+      assert.strictEqual(result.author, 'Edsger W. Dijkstra')
+      assert.strictEqual(result.blogs, 1)
+  })
+
+  test('of a bigger list is calculated right', () => {
+    const result = listHelper.mostBlogs(biggerListOfBlogs)
+    assert.strictEqual(result.author, 'Robert C. Martin')
+    assert.strictEqual(result.blogs, 3)
+  })
 
 })
