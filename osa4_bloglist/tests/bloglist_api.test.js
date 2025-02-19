@@ -77,10 +77,34 @@ test('a valid blog can be added ', async () => {
     const response = await api.get('/api/blogs')
   
     const title = response.body.map(r => r.title)
+    const likes = response.body.map(r => r.likes)
+  
+    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+    assert.strictEqual(likes[2], 10)
+    assert(title.includes('First class tests'))
+  })
+
+  test('if blog added without likes, likes will be 0 ', async () => {
+    const newBlog = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: ''
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+  
+    const likes = response.body.map(r => r.likes)
   
     assert.strictEqual(response.body.length, initialBlogs.length + 1)
   
-    assert(title.includes('First class tests'))
+    assert.strictEqual(likes[2], 0)
   })
 
 after(async () => {
