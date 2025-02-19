@@ -60,6 +60,29 @@ test('id field is called id, not _id', async () => {
     assert(ids, !undefined);
 })
 
+test('a valid blog can be added ', async () => {
+    const newBlog = {
+      title: 'First class tests',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html',
+      likes: 10
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+  
+    const title = response.body.map(r => r.title)
+  
+    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+  
+    assert(title.includes('First class tests'))
+  })
+
 after(async () => {
   await mongoose.connection.close()
 })
