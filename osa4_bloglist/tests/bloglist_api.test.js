@@ -107,6 +107,36 @@ test('a valid blog can be added ', async () => {
     assert.strictEqual(likes[2], 0)
   })
 
+  test('blog without title is invalid', async () => {
+    const newBlog = {
+      title: '',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 3
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('blog without url is invalid', async () => {
+    const newBlog = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: '',
+      likes: 3
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
 after(async () => {
   await mongoose.connection.close()
 })
