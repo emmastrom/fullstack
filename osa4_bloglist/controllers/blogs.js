@@ -70,8 +70,18 @@ blogsRouter.post('/', async (request, response, next) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-    const blog = await Blog.findByIdAndDelete(request.params.id)
+  const token = jwt.verify(request.token, process.env.SECRET)
+  if (!token) {
+    response.status(401).json({ error: 'no token'})
+  }
+  const blog = await Blog.findById(request.params.id)
+  console.log(blog)
+  if (blog.user.toString() === token.id) {
+    await Blog.findByIdAndDelete(blog.id)
     response.status(204).end()
+  } else {
+    response.status(401).json({ error: 'no authorization'})
+  }
 })
 
 module.exports = blogsRouter
