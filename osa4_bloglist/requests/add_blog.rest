@@ -2,9 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "newblog",
-    "author": "Ada Lovelace",
-    "url": "http://localhost:3003/api/blogs/newblog",
-    "likes": 5,
+    "title": "testing",
+    "author": "Test Tester",
+    "url": "http://wheretotest.com",
+    "likes": 12,
     "userId": "67b6202cf4bf6a1fdba00846"
 }
