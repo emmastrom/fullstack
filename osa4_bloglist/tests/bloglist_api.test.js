@@ -10,10 +10,8 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(helper.initialBlogs[0])
-    await blogObject.save()
-    blogObject = new Blog(helper.initialBlogs[1])
-    await blogObject.save()})
+    await Blog.insertMany(helper.initialBlogs)
+})
 
 test('bloglist is returned as json', async () => {
   await api
@@ -133,6 +131,29 @@ test('a valid blog can be added ', async () => {
 
     const title = blogsAtEnd.map(r => r.title)
     assert(!title.includes(blogToDelete.title))
+  })
+
+  test('editing a blog succeeds if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToEdit = blogsAtStart[0]
+    const editedBlog = {
+        title: `${blogToEdit.title}`,
+        author: `${blogToEdit.author}`,
+        url: `${blogToEdit.url}`,
+        likes: 20
+    }
+      
+    await api
+      .put(`/api/blogs/${blogToEdit.id}`)
+      .send(editedBlog)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+
+    const likes = blogsAtEnd.map(r => r.likes)
+    assert.strictEqual(likes[0], 20)
   })
 
 after(async () => {
