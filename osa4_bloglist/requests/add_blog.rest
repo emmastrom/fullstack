@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVtdGVzdCIsImlkIjoiNjdiNjU2NWU2NzFkNWNkOTM0ZmM4NDFjIiwiaWF0IjoxNzQwMDAzMzk2fQ.IrHVlP32H2P0bl2m_NSP1La8nMpXcMvVnyBUoWIdCG4
 
 {
     "title": "testing",
     "author": "Test Tester",
     "url": "http://wheretotest.com",
-    "likes": 12,
-    "userId": "67b6202cf4bf6a1fdba00846"
+    "likes": 12
 }
