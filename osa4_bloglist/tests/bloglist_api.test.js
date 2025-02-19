@@ -40,7 +40,7 @@ test('bloglist is returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there are two notes', async () => {
+test('GET returns the right amount of blogs', async () => {
     const response = await api.get('/api/blogs')
   
     assert.strictEqual(response.body.length, initialBlogs.length)
@@ -52,6 +52,13 @@ test('the first blog is by Michael Chan', async () => {
     const contents = response.body.map(e => e.author)
     assert(contents.includes('Michael Chan'))
   })
+
+test('id field is called id, not _id', async () => {
+    const response = await api.get('/api/blogs')
+
+    const ids = response.body[0].id
+    assert(ids, !undefined);
+})
 
 after(async () => {
   await mongoose.connection.close()
