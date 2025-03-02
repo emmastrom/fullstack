@@ -20,7 +20,7 @@ const AnecdoteList = () => {
     return (
         <div>
       <h2>Anecdotes</h2>
-      {anecdotes
+      {[...anecdotes]
         .sort((a, b) => b.votes - a.votes)
         .map(anecdote =>
         <div key={anecdote.id}>
