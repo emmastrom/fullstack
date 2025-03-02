@@ -25,8 +25,9 @@ const reducer = (state = initialState, action) => {
   switch(action.type) {
     case 'VOTE':
       // eslint-disable-next-line no-case-declarations
-      const voteId = action.payload.id
-      return state.map(anecdote => anecdote.id !== voteId ? anecdote : action.payload)
+      return state.map(anecdote => anecdote.id !== action.payload.id ? anecdote : action.payload)
+    case 'NEW_ANECDOTE':
+      return [...state, action.payload]
   default: 
   return state
   }
@@ -38,6 +39,13 @@ export const voteAnecdote = (anecdote) => {
   return {
     type: 'VOTE',
     payload: voted
+  }
+}
+
+export const createAnecdote = (content) => {
+  return {
+    type: 'NEW_ANECDOTE',
+    payload: asObject(content)
   }
 }
 
