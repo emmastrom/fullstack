@@ -19,12 +19,11 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
   switch(action.type) {
     case 'VOTE':
-      // eslint-disable-next-line no-case-declarations
       return state.map(anecdote => anecdote.id !== action.payload.id ? anecdote : action.payload)
     case 'NEW_ANECDOTE':
       return [...state, action.payload]
@@ -49,4 +48,4 @@ export const createAnecdote = (content) => {
   }
 }
 
-export default reducer
+export default anecdoteReducer
