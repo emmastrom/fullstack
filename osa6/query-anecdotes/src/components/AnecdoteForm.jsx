@@ -11,7 +11,17 @@ const AnecdoteForm = () => {
     mutationFn: createAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-    }})
+      dispatch({type: 'SET_NOTIFICATION', payload: 'New anecdote created'})
+    },
+    onError: () => {
+      dispatch({type: 'SET_NOTIFICATION', payload: 'too short anecdote, must have length 5 or more'})
+    },
+    onSettled: () => {
+      setTimeout(()=> {
+        dispatch({type: 'SET_NOTIFICATION', payload: ''})
+      }, 5000)
+    }
+  })
 
   const onCreate = (event) => {
     event.preventDefault()
@@ -19,10 +29,6 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     console.log('new anecdote')
     newAnecdoteMutation.mutate({ content, votes: 0 })
-    dispatch({type: 'SET_NOTIFICATION', payload: 'New anecdote created'})
-    setTimeout(()=> {
-      dispatch({type: 'SET_NOTIFICATION', payload: ''})
-    }, 5000)
   }
 
   return (
