@@ -86,11 +86,10 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
-  const handleReset = (e) => {
-    e.preventDefault()
-    content.reset()
-    author.reset()
-    info.reset()
+  const handleReset = () => {
+    content.onChange
+    author.onChange
+    info.onChange
   }
 
   return (
