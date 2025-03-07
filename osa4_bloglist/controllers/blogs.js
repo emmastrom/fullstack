@@ -82,4 +82,25 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
 })
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const comment = request.body
+  console.log(comment)
+  const token = jwt.verify(request.token, process.env.SECRET)
+  if (!token) {
+    response.status(401).json({ error: 'no token'})
+  }
+  console.log(request.params.id)
+  const blog = await Blog.findById(request.params.id)
+  console.log(blog)
+  blog.comments.push(comment)
+  const saved = await blog.save()
+  response.status(200).json(saved)
+})
+
+blogsRouter.get('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const comments = blog.comments
+  response.json(comments)
+})
+
 module.exports = blogsRouter
