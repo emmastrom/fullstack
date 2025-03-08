@@ -84,7 +84,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.post('/:id/comments', async (request, response) => {
   const comment = request.body
-  console.log(comment)
+  console.log('HEI', comment)
   const token = jwt.verify(request.token, process.env.SECRET)
   if (!token) {
     response.status(401).json({ error: 'no token'})
