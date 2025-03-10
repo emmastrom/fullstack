@@ -1,9 +1,10 @@
-const Books = (props) => {
+/* eslint-disable react/prop-types */
+const Books = props => {
   if (!props.show) {
     return null
   }
 
-  const books = []
+  const books = props.books
 
   return (
     <div>
@@ -16,7 +17,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((a) => (
+          {books.map(a => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author}</td>
