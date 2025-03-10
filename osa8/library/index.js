@@ -107,11 +107,11 @@ const typeDefs = `
   }
 
   type Book {
-  title: String
-  published: Int
-  author: String
+  title: String!
+  published: String!
+  author: String!
   id: ID!
-  genres: [String]
+  genres: [String!]!
   }
 
   type Query {
@@ -124,14 +124,14 @@ const typeDefs = `
   type Mutation {
   addBook(
   title: String!
-  published: Int!
+  published: String!
   author: String!
   genres: [String!]
   ): Book
 
   editAuthor(
   name: String!
-  setBornTo: Int!
+  setBornTo: String!
   ): Author
 
   }

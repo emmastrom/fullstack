@@ -1,8 +1,5 @@
 /* eslint-disable react/prop-types */
 const Authors = props => {
-  if (!props.show) {
-    return null
-  }
   const authors = props.authors
 
   return (
