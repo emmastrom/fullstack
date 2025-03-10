@@ -3,6 +3,7 @@ import Authors from "./components/Authors"
 import Books from "./components/Books"
 import NewBook from "./components/NewBook"
 import { gql, useQuery } from "@apollo/client"
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 
 const ALL_AUTHORS = gql`
   query {
@@ -37,19 +38,44 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <div>
-        <button onClick={() => setPage("authors")}>authors</button>
-        <button onClick={() => setPage("books")}>books</button>
-        <button onClick={() => setPage("add")}>add book</button>
+        <div>
+          <Link to="/">
+            <button onClick={() => setPage("authors")}>authors</button>
+          </Link>
+          <Link to="/books">
+            <button onClick={() => setPage("books")}>books</button>
+          </Link>
+          <Link to="newbook">
+            <button onClick={() => setPage("add")}>add book</button>
+          </Link>
+        </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Authors
+                show={page === "authors"}
+                authors={result.data.allAuthors}
+              />
+            }
+          />
+
+          <Route
+            path="/books"
+            element={
+              <Books
+                show={page === "books"}
+                books={booksResult.data.allBooks}
+              />
+            }
+          />
+
+          <Route path="/newbook" element={<NewBook show={page === "add"} />} />
+        </Routes>
       </div>
-
-      <Authors show={page === "authors"} authors={result.data.allAuthors} />
-
-      <Books show={page === "books"} books={booksResult.data.allBooks} />
-
-      <NewBook show={page === "add"} />
-    </div>
+    </Router>
   )
 }
 
