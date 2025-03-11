@@ -1,25 +1,28 @@
 import { useState } from "react"
-import { UPDATE_BIRTHYEAR, ALL_AUTHORS, ALL_BOOKS } from "../queries"
+import { UPDATE_BIRTHYEAR, ALL_AUTHORS } from "../queries"
 import { useMutation } from "@apollo/client"
+import Select from "react-select"
 
 /* eslint-disable react/prop-types */
 const Authors = props => {
-  const [name, setName] = useState("")
   const [born, setBorn] = useState("")
   const authors = props.authors
+  const [selectedAuthor, setSelectedAuthor] = useState(null)
+  const options = authors.map(a => {
+    return { value: a.name, label: a.name }
+  })
 
   const [updateBirthyear] = useMutation(UPDATE_BIRTHYEAR, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [{ query: ALL_AUTHORS }],
   })
 
   const submit = async event => {
     event.preventDefault()
-
-    updateBirthyear({ variables: { name, born } })
+    updateBirthyear({ variables: { name: selectedAuthor.label, born } })
 
     console.log("update birthyear...")
 
-    setName("")
+    setSelectedAuthor(null)
     setBorn("")
   }
 
@@ -34,7 +37,7 @@ const Authors = props => {
             <th>books</th>
           </tr>
           {authors.map(a => (
-            <tr key={a.name}>
+            <tr key={a.id}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
@@ -46,13 +49,12 @@ const Authors = props => {
         <h2>Set birthyear</h2>
       </div>
       <form onSubmit={submit}>
-        <div>
-          name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
+        <Select
+          defaultValue={selectedAuthor}
+          onChange={setSelectedAuthor}
+          placeholder={"Select author"}
+          options={options}
+        />
         <div>
           born
           <input
