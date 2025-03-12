@@ -136,7 +136,7 @@ const resolvers = {
       try {
         await updatedAuthor.save()
       } catch (error) {
-        throw new GraphQLError("saving author birthyear failed", {
+        throw new GraphQLError("Editing author birthyear failed", {
           extensions: {
             code: "BAD_USER_INPUT",
             invalidArgs: args.name,
