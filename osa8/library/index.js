@@ -7,6 +7,7 @@ const mongoose = require("mongoose")
 mongoose.set("strictQuery", false)
 const Book = require("./models/book")
 const Author = require("./models/author")
+const author = require("./models/author")
 require("dotenv").config()
 
 const MONGODB_URI = process.env.MONGODB_URI
@@ -66,17 +67,20 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
+      console.log(args.author)
+      console.log(args.genre)
       if (args.author && args.genre !== undefined) {
         return Book.find({
-          genres: { $exists: args.genre },
+          genres: { $in: args.genre },
           author: args.author,
-        })
-      } else if (args.genre) {
-        return Book.find({ genres: { $exists: args.genre } })
-      } else if (args.author) {
-        return Book.find({ author: args.author })
+        }).populate("author")
+      } else if (args.genre !== undefined) {
+        return Book.find({ genres: { $in: args.genre } }).populate("author")
+      } else if (args.author !== undefined) {
+        const searchAuthor = await Author.findOne({ name: args.author })
+        return Book.find({ author: searchAuthor }).populate("author")
       } else {
-        return Book.find({})
+        return Book.find({}).populate("author")
       }
     },
     allAuthors: async () => {
@@ -90,11 +94,29 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      console.log(args)
-      const newBook = new Book({ ...args })
+      const existingAuthor = await Author.findOne({ name: args.author })
+      if (!existingAuthor) {
+        const newAuthor = new Author({ name: args.author })
+        console.log(newAuthor)
+        try {
+          await newAuthor.save()
+        } catch (error) {
+          throw new GraphQLError("saving new author failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args,
+              error,
+            },
+          })
+        }
+      }
+      const newBookAuthor = await Author.findOne({ name: args.author })
+      const newBook = new Book({ ...args, author: newBookAuthor })
       console.log(newBook)
+      console.log(newBookAuthor)
       try {
         await newBook.save()
+        return newBook
       } catch (error) {
         throw new GraphQLError("Saving book failed", {
           extensions: {
@@ -104,7 +126,6 @@ const resolvers = {
           },
         })
       }
-      return newBook
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
