@@ -19,11 +19,6 @@ const App = () => {
     onData: ({ data }) => {
       console.log(data)
       const addedBook = data.data.bookAdded
-      try {
-        window.alert("Book added")
-      } catch {
-        console.log("error")
-      }
       client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
         return {
           allBooks: allBooks.concat(addedBook),
@@ -41,6 +36,8 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
   }
+
+  console.log(token)
 
   if (!token) {
     return (
