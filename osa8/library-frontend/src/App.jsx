@@ -13,29 +13,27 @@ const App = () => {
   const result = useQuery(ALL_AUTHORS)
   const booksResult = useQuery(ALL_BOOKS)
 
+  if (result.loading || booksResult.loading) {
+    return <div>loading...</div>
+  }
+
   const logout = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
   }
 
-  if (result.loading || booksResult.loading) {
-    return <div>loading...</div>
-  }
-
   if (!token) {
     return (
-      <div>
-        <h2>Login</h2>
+      <>
         <LoginForm setToken={setToken} />
-      </div>
+      </>
     )
   }
 
   return (
     <Router>
       <div>
-        <button onClick={logout}>logout</button>
         <div>
           <Link to="/">
             <button>authors</button>
@@ -43,9 +41,10 @@ const App = () => {
           <Link to="/books">
             <button>books</button>
           </Link>
-          <Link to="newbook">
+          <Link to="/newbook">
             <button>add book</button>
           </Link>
+          <button onClick={logout}>logout</button>
         </div>
         <Routes>
           <Route

@@ -55,7 +55,7 @@ export const ADD_BOOK = gql`
 `
 
 export const UPDATE_BIRTHYEAR = gql`
-  mutation editAuthorBirth($name: String!, $born: String!) {
+  mutation editAuthorBirth($name: String!, $born: Int!) {
     editAuthor(name: $name, born: $born) {
       name
       born

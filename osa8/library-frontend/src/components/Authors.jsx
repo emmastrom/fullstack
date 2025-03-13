@@ -18,8 +18,8 @@ const Authors = props => {
 
   const submit = async event => {
     event.preventDefault()
+    console.log(selectedAuthor)
     updateBirthyear({ variables: { name: selectedAuthor.label, born } })
-
     console.log("update birthyear...")
 
     setSelectedAuthor(null)
@@ -60,7 +60,7 @@ const Authors = props => {
           <input
             type="number"
             value={born}
-            onChange={({ target }) => setBorn(target.value)}
+            onInput={({ target }) => setBorn(Number(target.value))}
           />
         </div>
         <button type="submit">update author</button>

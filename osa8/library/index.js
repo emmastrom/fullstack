@@ -37,7 +37,7 @@ type User {
   type Author {
     name: String!
     id: ID!
-    born: String
+    born: Int
     bookCount: Int!
   }
 
