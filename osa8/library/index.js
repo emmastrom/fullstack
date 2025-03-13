@@ -193,7 +193,10 @@ const resolvers = {
       return updatedAuthor
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+      })
 
       return user.save().catch(error => {
         throw new GraphQLError("Creating the user failed", {
