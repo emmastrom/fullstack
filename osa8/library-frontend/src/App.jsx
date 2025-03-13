@@ -19,6 +19,7 @@ const App = () => {
     onData: ({ data }) => {
       console.log(data)
       const addedBook = data.data.bookAdded
+      window.alert("Book added")
       client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
         return {
           allBooks: allBooks.concat(addedBook),
