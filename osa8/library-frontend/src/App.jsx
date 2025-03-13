@@ -1,9 +1,9 @@
 import Authors from "./components/Authors"
 import Books from "./components/Books"
 import NewBook from "./components/NewBook"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery, useSubscription } from "@apollo/client"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
-import { ALL_AUTHORS, ALL_BOOKS, ME } from "./queries"
+import { ALL_AUTHORS, ALL_BOOKS, ME, BOOK_ADDED } from "./queries"
 import { useState } from "react"
 import LoginForm from "./components/LoginForm"
 import Recommendations from "./components/Recommendations"
@@ -15,6 +15,18 @@ const App = () => {
   const booksResult = useQuery(ALL_BOOKS)
   const userResult = useQuery(ME)
 
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log(data)
+      const addedBook = data.data.bookAdded
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
+    },
+  })
+
   if (result.loading || booksResult.loading || userResult.loading) {
     return <div>loading...</div>
   }
@@ -25,7 +37,7 @@ const App = () => {
     client.resetStore()
   }
 
-  console.log(userResult.data.me)
+  console.log(token)
 
   if (!token) {
     return (
